@@ -3,6 +3,8 @@
     namespace App\Http\Controllers\Api;
 
     use App\Http\Controllers\Controller;
+    use App\Http\Requests\ClientRequest;
+    use App\Http\Requests\ClientUpdateRequest;
     use App\Http\Resources\Client;
     use App\Http\Resources\ClientWithProducts;
     use App\Integrare\Services\ClientService;
@@ -40,9 +42,16 @@
          *
          * @return \Illuminate\Http\Response
          */
-        public function store(Request $request)
+        public function store(ClientRequest $request)
         {
-            //
+            try {
+                $client = $this->clientService->buildInsert($request->input());
+
+                return response()->json($client,201);
+            } catch (Exception $exception) {
+                return response()->json(['data' => $exception->getMessage()],
+                    500);
+            }
         }
 
         /**
@@ -54,21 +63,27 @@
          */
         public function show($id)
         {
-            //
+            return response()->json(['data' => $this->clientService->renderEdit($id)],200);
         }
 
 
         /**
-         * Update the specified resource in storage.
+         * @param ClientUpdateRequest $request
+         * @param                     $id
          *
-         * @param  \Illuminate\Http\Request $request
-         * @param  int                      $id
-         *
-         * @return \Illuminate\Http\Response
+         * @return \Illuminate\Http\JsonResponse
          */
         public function update(Request $request, $id)
         {
-            //
+            try {
+                dd($request->input());
+                $this->clientService->buildUpdate($id,$request->input());
+                $client = $this->clientService->renderEdit($id);
+                return response()->json($client,200);
+            } catch (Exception $exception) {
+                return response()->json(['data' => $exception->getMessage()],
+                    500);
+            }
         }
 
         /**

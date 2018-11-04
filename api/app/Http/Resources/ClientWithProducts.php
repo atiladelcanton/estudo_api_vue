@@ -15,17 +15,6 @@
          */
         public function toArray($request)
         {
-
-                return [
-                    'id'           => $this->id,
-                    'name'         => $this->name,
-                    'cep'          => $this->cep,
-                    'city'         => $this->city,
-                    'state'        => $this->state,
-                    'neighborhood' => $this->neighborhood,
-                    'address'      => $this->address,
-                    'email'        => $this->email,
-                    'products'     => new Product($this->products),
-                ];
+            return new Product($this->products);
         }
     }

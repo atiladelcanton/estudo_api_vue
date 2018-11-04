@@ -15,12 +15,14 @@
     {
         /**
          * ClientRepository constructor.
+         *
          * @param Client $client
          */
         public function __construct(Client $client)
         {
             parent::__construct($client);
         }
+
         /**
          * @return mixed
          */
@@ -29,7 +31,8 @@
             return $this->model->get();
         }
 
-        public function getByIdWithProducts($id){
-            return $this->model->with('products')->where('id',$id)->first();
+        public function getByIdWithProducts($id)
+        {
+            return $this->model->with('products')->where('id', $id)->first();
         }
     }
