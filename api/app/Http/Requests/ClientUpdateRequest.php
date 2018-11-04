@@ -24,26 +24,33 @@
         public function rules()
         {
             return [
-                'name'         => 'required',
-                'cep'          => 'required',
-                'city'         => 'required',
-                'state'        => 'required',
-                'neighborhood' => 'required',
-                'address'      => 'required',
-                'email'        => 'required',
+                'name'         => 'required|max:150',
+                'cep'          => 'required|max:12',
+                'city'         => 'required|max:150',
+                'state'        => 'required|max:2',
+                'neighborhood' => 'required|max:200',
+                'address'      => 'required|max:255',
+                'email'        => 'required|max:100',
             ];
         }
 
-        public function attributes()
+        public function messages()
         {
             return [
-                'name.required' => 'Nome Obrigatório',
-                'cep.required' => 'Cep Obrigatório',
-                'city.required' => 'Cidade Obrigatório',
-                'state.required' => 'Estado Obrigatório',
+                'name.required'         => 'Nome Obrigatório',
+                'name.max'              => 'Limite de caracteres é de 150',
+                'cep.required'          => 'Cep Obrigatório',
+                'cep.max'               => 'Limite de caracteres é de 12',
+                'city.required'         => 'Cidade Obrigatório',
+                'city.max'              => 'Limite de caracteres é de 150',
+                'state.required'        => 'Estado Obrigatório',
+                'state.max'             => 'Limite de caracteres é de 2',
                 'neighborhood.required' => 'Bairro Obrigatório',
-                'address.required' => 'Endereço Obrigatório',
-                'email.required' => 'E-mail Obrigatório'
+                'neighborhood.max'      => 'Limite de caracteres é de 200',
+                'address.required'      => 'Endereço Obrigatório',
+                'address.max'           => 'Limite de caracteres é de 255',
+                'email.required'        => 'E-mail Obrigatório',
+                'email.max'             => 'Limite de caracteres é de 100',
             ];
         }
     }

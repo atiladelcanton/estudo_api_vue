@@ -34,10 +34,15 @@
          * @param $id
          *
          * @return mixed
+         * @throws \Exception
          */
         public function renderEdit($id)
         {
+            $this->exists($id);
+
             return $this->productRepository->getById($id);
+
+
         }
 
         /**
@@ -45,10 +50,13 @@
          * @param $data
          *
          * @return mixed
+         * @throws \Exception
          */
         public function buildUpdate($id, $data)
         {
-            return $this->buildUpdate($id, $data);
+            $this->exists($id);
+
+            return $this->productRepository->update($id, $data);
         }
 
         /**
@@ -65,9 +73,27 @@
          * @param $id
          *
          * @return mixed
+         * @throws \Exception
          */
         public function buildDelete($id)
         {
+            $this->exists($id);
             return $this->productRepository->delete($id);
+        }
+
+        /**
+         * Validate the existence of the registry
+         *
+         * @param $id
+         *
+         * @throws \Exception
+         */
+        public function exists($id)
+        {
+            $product = $this->productRepository->getById($id);
+
+            if (is_null($product)) {
+                throw new \Exception('Registro não encontrado', 404);
+            }
         }
     }

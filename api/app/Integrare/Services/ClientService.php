@@ -1,10 +1,5 @@
 <?php
-    /**
-     * Created by PhpStorm.
-     * User: atilarampazo
-     * Date: 03/11/2018
-     * Time: 22:12
-     */
+
 
     namespace App\Integrare\Services;
 
@@ -35,9 +30,11 @@
          * @param $id
          *
          * @return mixed
+         * @throws \Exception
          */
         public function renderEdit($id)
         {
+            $this->exists($id);
             return $this->clientRepository->getById($id);
         }
 
@@ -46,10 +43,13 @@
          * @param $data
          *
          * @return mixed
+         * @throws \Exception
          */
         public function buildUpdate($id, $data)
         {
-            return $this->buildUpdate($id, $data);
+            $this->exists($id);
+
+            return $this->clientRepository->update($id, $data);
         }
 
         /**
@@ -66,13 +66,58 @@
          * @param $id
          *
          * @return mixed
+         * @throws \Exception
          */
         public function buildDelete($id)
         {
+            $this->exists($id);
             return $this->clientRepository->delete($id);
         }
 
-        public function renderWithRelationshipProduct($id){
-            return new Client($this->clientRepository->getByIdWithProducts($id));
+        /**
+         * @param null $id
+         *
+         * @return ClientsRepository|\Illuminate\Database\Eloquent\Model|null|object
+         */
+        public function renderWithRelationshipProduct($id = null)
+        {
+            if (!is_null($id)) {
+                return $this->clientRepository->getByIdWithProducts($id);
+            }
+
+            return $this->clientRepository->getWithProducts();
+        }
+
+        /**
+         * Validate the existence of the registry
+         *
+         * @param $id
+         *
+         * @throws \Exception
+         */
+        public function exists($id)
+        {
+            $product = $this->clientRepository->getById($id);
+
+            if (is_null($product)) {
+                throw new \Exception('Registro não encontrado', 404);
+            }
+        }
+
+        /**
+         * @param $data
+         *
+         * @return mixed
+         */
+        public function buildInsertPivot($data)
+        {
+
+            $client = $this->clientRepository->getById($data['client_id']);
+
+            $data['total'] = intval($data['quantity'])
+                * floatval($data['unit_price']);
+            $data['date'] = today()->toDateString();
+
+            return $client->products()->attach($data['product_id'], $data);
         }
     }

@@ -26,6 +26,8 @@
                         'neighborhood' => $client->neighborhood,
                         'address'      => $client->address,
                         'email'        => $client->email,
+                        'created'      => $client->created_at->format('Y-m-d H:i:s'),
+                        'updated'      => $client->updated_at->format('Y-m-d H:i:s'),
                     ];
                 }),
             ];

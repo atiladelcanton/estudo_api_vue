@@ -3,61 +3,109 @@
     namespace App\Http\Controllers\Api;
 
     use App\Http\Controllers\Controller;
+    use App\Http\Requests\ProductRequest;
+    use App\Http\Resources\Product;
+    use App\Integrare\Services\ProductService;
     use Illuminate\Http\Request;
 
     class ProductsController extends Controller
     {
-        public function __construct()
+        protected $productsService;
+
+        public function __construct(
+            ProductService $productService
+        )
         {
+            $this->productsService = $productService;
         }
 
         /**
-         * Display a listing of the resource.
-         *
-         * @return \Illuminate\Http\Response
+         * @api {get} /products/:id Request all Products
+         * @return Product
          */
         public function index()
         {
-            //
+            return new Product($this->productsService->renderList());
         }
 
 
         /**
-         * Store a newly created resource in storage.
+         * @api {post} /products Store a new product in database
          *
-         * @param  \Illuminate\Http\Request $request
+         * @param ProductRequest $request
          *
-         * @return \Illuminate\Http\Response
+         * @return \Illuminate\Http\JsonResponse
          */
-        public function store(Request $request)
+        public function store(ProductRequest $request)
         {
-            //
+            try {
+
+                $product
+                    = $this->productsService->buildInsert($request->input());
+
+                return response()->json(['data' => $product], 201);
+            } catch (\Exception $e) {
+                \Log::error(
+                    $e->getMessage(),
+                    [
+                        'linha'   => $e->getLine(),
+                        'arquivo' => $e->getFile(),
+                    ]
+                );
+
+                return response()->json([$e->getMessage()],
+                    500);
+            }
         }
 
         /**
-         * Display the specified resource.
+         * @api {get} /products/:id Request Product information
          *
-         * @param  int $id
+         * @param $id
          *
-         * @return \Illuminate\Http\Response
+         * @return \Illuminate\Http\JsonResponse
          */
         public function show($id)
         {
-            //
+            try {
+                return response()->json(['data' => $this->productsService->renderEdit($id)],
+                    200);
+            } catch (\Exception $e) {
+                return response()->json(['data' => $e->getMessage()],
+                    $e->getCode());
+            }
         }
 
 
         /**
-         * Update the specified resource in storage.
+         * @api {put} /products/:id Update the specified product
          *
-         * @param  \Illuminate\Http\Request $request
-         * @param  int                      $id
+         * @param ProductRequest $request
+         * @param                $id
          *
-         * @return \Illuminate\Http\Response
+         * @return \Illuminate\Http\JsonResponse
          */
-        public function update(Request $request, $id)
+        public function update(ProductRequest $request, $id)
         {
-            //
+            try {
+
+                $this->productsService->buildUpdate($id, $request->input());
+                $product = $this->productsService->renderEdit($id);
+
+                return response()->json(['data' => $product],
+                    200);
+            } catch (\Exception $e) {
+                \Log::error(
+                    $e->getMessage(),
+                    [
+                        'linha'   => $e->getLine(),
+                        'arquivo' => $e->getFile(),
+                    ]
+                );
+
+                return response()->json([$e->getMessage()],
+                    $e->getCode());
+            }
         }
 
         /**
@@ -69,6 +117,22 @@
          */
         public function destroy($id)
         {
-            //
+            try {
+
+                $this->productsService->buildDelete($id);
+
+                return response()->json(['data' => 'Produto Removido'], 200);
+            } catch (\Exception $e) {
+                \Log::error(
+                    $e->getMessage(),
+                    [
+                        'linha'   => $e->getLine(),
+                        'arquivo' => $e->getFile(),
+                    ]
+                );
+
+                return response()->json([$e->getMessage()],
+                    500);
+            }
         }
     }

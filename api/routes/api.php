@@ -15,4 +15,6 @@
     Route::resource('clients', 'Api\ClientsController');
     Route::get('clients/{id}/products', 'Api\ClientsController@clientsProducts');
     Route::resource('products', 'Api\ProductsController');
-    Route::resource('sales', 'Api\ApiSalesController');
+    Route::get('products/{id}/clients', 'Api\ProductsController@productsClients');
+    Route::resource('sales', 'Api\SalesController');
+    Route::delete('sales/{client_id}/{product_id}','Api\SalesController@destroy');

@@ -22,13 +22,13 @@
                 'address',
                 'email',
             ];
-        protected $hidden = ['created_at', 'created_at'];
 
+        protected $dates = ['created_at','updated_at'];
         /**
          * @return BelongsToMany
          */
         public function products(): BelongsToMany
         {
-            return $this->belongsToMany(Product::class);
+            return $this->belongsToMany(Product::class)->withPivot('quantity','date','unit_price','total');
         }
     }

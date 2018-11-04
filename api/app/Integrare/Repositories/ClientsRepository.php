@@ -35,4 +35,8 @@
         {
             return $this->model->with('products')->where('id', $id)->first();
         }
+        public function getWithProducts()
+        {
+            return $this->model->has('products')->get();
+        }
     }

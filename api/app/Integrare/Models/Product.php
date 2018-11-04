@@ -13,7 +13,9 @@
          * @var array
          */
         protected $fillable
-            = ['name', 'description', 'unit_price'];
+            = ['name', 'description'];
+
+        protected $dates = ['created_at','updated_at'];
 
         public function clients() : BelongsToMany{
             return $this->belongsToMany(Client::class);
