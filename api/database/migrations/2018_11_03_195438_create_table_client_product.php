@@ -20,7 +20,7 @@
                     $table->integer('client_id')->unsigned();
                     $table->integer('product_id')->unsigned();
                     $table->integer('quantity');
-                    $table->dateTime('data');
+                    $table->dateTime('date');
                     $table->decimal('unit_price',10,2);
                     $table->decimal('total', 10, 2);
                     $table->nullableTimestamps();
