@@ -6,19 +6,9 @@
 </template>
 
 <script>
-    /*import VueRouter from 'vue-router'
-
-
-    const routes = [
-        {path: '/', component: Sales},
-    ];
-
-    const router = new VueRouter(routes);*/
 
     export default {
-        name: "app",
-        //router,
-        //components: {Sales}
+        name: "app"
     };
 </script>
 
