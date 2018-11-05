@@ -37,6 +37,6 @@
         }
         public function getWithProducts()
         {
-            return $this->model->has('products')->get();
+            return $this->model->has('products')->orderBy('name')->get();
         }
     }

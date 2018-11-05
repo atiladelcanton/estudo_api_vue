@@ -22,8 +22,10 @@
                 return [
                     'id'           => $item->id,
                     'name'         => $item->name,
+                    'email'         => $item->email,
                     'total'        => $item->products()->sum('total'),
-                    'qtd'           => $item->products()->count()
+                    'qtd'           => $item->products()->count(),
+                    'pivot'         =>$item->products
                 ];
             });
         }
